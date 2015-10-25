@@ -20,7 +20,7 @@ import os
 
 subreddits = ["test"]
 
-r = praw.Reddit(user_agent = "Reddit Testing by /u/Psychovyle")
+r = praw.Reddit(user_agent = "Reddit Currency Exchange Bot by /u/username")
 o = OAuth2Util.OAuth2Util(r)
 
 if not os.path.isfile("posts_replied_to.txt"):
@@ -41,25 +41,27 @@ def writeFile():
 							
 #generate and post reply
 def generateComment(submission, results):
-	output = ""
+	signature = "***\n\nCurrent exchange rates from [fixer.io](http://fixer.io) | [Source](https://github.com/cp2846/reddit-currency-bot) | [Contact](https://www.reddit.com/message/compose/?to=Username)"
+	conversions = ""
 	count = 0
 	
 	for result in results:
 		type = result[0]
 		value = result[1]
 		converted_values = currencyconverter.convert(type,value)
-		output += "\n\n"+converted_values
-		count += 1
+		conversions += "\n\n"+converted_values
 		
 	try:
-		submission.add_comment("Detected ("+str(count)+") currency values in title:\n\n"+output)
+		submission.add_comment(">"+submission.title+"\n\n"+conversions+"\n\n"+signature)
 		print "Successfully added comment on submission "+submission.id
+		posts_replied_to.append(submission.id)
 	except:
 		print "Error encountered on submission "+submission.id
 		
 
 	
 def runBot():
+
 	o.refresh(force=True)
 	
 	for subreddit in subreddits:
@@ -75,7 +77,6 @@ def runBot():
 			if len(detected_currency) > 0 and submission.id not in posts_replied_to:
 				print "found one! attempting to reply... "
 				generateComment(submission, detected_currency)
-				posts_replied_to.append(submission.id)
 		
 	writeFile()
 	print "Sleeping... "
