@@ -43,14 +43,12 @@ def writeFile():
 def generateComment(submission, results):
     signature = "***\n\nCurrent exchange rates from [fixer.io](http://fixer.io) | [Source](https://github.com/cp2846/reddit-currency-bot) | [Contact](https://www.reddit.com/message/compose/?to=Psychovyle)"
     conversions = ""
-    count = 0
     
     for result in results:
         type = result[0]
         value = result[1]
         converted_values = currencyconverter.convert(type,value)
         conversions += "\n\n"+converted_values
-        count += 1
         
     try:
         submission.add_comment(">"+submission.title+"\n\n"+conversions+"\n\n"+signature)
