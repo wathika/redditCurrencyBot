@@ -43,7 +43,6 @@ def writeFile():
 def generateComment(submission, results):
 	signature = "***\n\nCurrent exchange rates from [fixer.io](http://fixer.io) | [Source](https://github.com/cp2846/reddit-currency-bot) | [Contact](https://www.reddit.com/message/compose/?to=Username)"
 	conversions = ""
-	count = 0
 	
 	for result in results:
 		type = result[0]
